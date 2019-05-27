@@ -1,0 +1,24 @@
+<p>Car list</p>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Manufacturer</th>
+      <th scope="col">Model</th>
+      <th scope="col">Year</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let car of cars; let i = index">
+      <td>{{car.id}}</td>
+      <td>{{car.manufacturer}}</td>
+      <td>{{car.model}}</td>
+      <td>{{car.year}}</td>
+      <td>
+        <button type="button" class="btn btn-primary"  (click)="carDetails(car.id)"><i class="fa fa-list-alt fa-fw"></i> <span class="d-none d-md-inline">Details</span></button>
+      </td>
+    </tr>
+  </tbody>
+</table>
