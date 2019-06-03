@@ -13,9 +13,9 @@
   <tbody>
     <tr *ngFor="let car of cars; let i = index">
       <td>{{car.id}}</td>
-      <td>{{car.manufacturer}}</td>
+      <td>{{car.marka}}</td>
       <td>{{car.model}}</td>
-      <td>{{car.year}}</td>
+      <td>{{car.godina_modela}}</td>
       <td>
         <button type="button" class="btn btn-primary"  (click)="carDetails(car.id)"><i class="fa fa-list-alt fa-fw"></i> <span class="d-none d-md-inline">Details</span></button>
       </td>

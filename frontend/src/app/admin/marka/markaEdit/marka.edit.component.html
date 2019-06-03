@@ -1,0 +1,19 @@
+<div class="container">
+  <h1>{{action}} marku</h1>
+  <form (ngSubmit)="onSubmit()" #markaEditForm="ngForm">
+    <div *ngIf="action == 'Edit'"  class="form-group">
+      <label for="id">ID</label>
+      <input type="text" class="form-control" [(ngModel)]="marka.id" #id="ngModel" id="id" name="id" disabled>
+    </div>
+
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" class="form-control" id="name" required [(ngModel)]="marka.name" #name="ngModel" name="name">
+      <div [hidden]="name.valid || name.pristine" class="alert alert-danger">Naziv je obavezan.</div>
+    </div>
+
+    <button type="submit" class="btn btn-success" [disabled]="!markaEditForm.form.valid">{{action}}</button>
+    <button type="button" class="btn btn-danger" (click)="goBack()">Nazad</button>
+
+  </form>
+</div>

@@ -1,0 +1,43 @@
+<div [hidden]="!message" class="alert alert-success">{{message}}</div>
+
+<button type="button" (click)="createDodatnaOprema()" class="btn btn-primary"><i class="fa fa-plus fa-fw"></i> <span class="d-none d-md-inline"> Dodaj</span></button>
+
+<br>
+<br>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Naziv</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let dodatnaOprema of dodatnaOpremaList; let i = index">
+      <td>{{dodatnaOprema.id}}</td>
+      <td>{{dodatnaOprema.name}}</td>
+      <td>
+        <button type="button" class="btn btn-info" (click)="editDodatnaOprema(dodatnaOprema.id)"><i class="fa fa-edit fa-fw"></i> <span class="d-none d-md-inline"> Uredi</span></button>
+      </td>
+      <td>
+          <button type="button" class="btn btn-danger" (click)="selectForDelete(dodatnaOprema)"><i class="fa fa-trash fa-fw"></i> <span class="d-none d-md-inline"> Izbriši</span></button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Delete Confirm Modal -->
+<app-dodatna-oprema-delete-dialog [(visible)]="showDialog">
+	<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Potvrdi brisanje</h5>
+  </div>
+  <div class="modal-body">
+    Jeste li sigurni da želite izbrisati '{{selectedForDelete.name}}'?
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="showDialog=false">Odustani</button>
+    <button type="button" class="btn btn-danger" (click)="deleteDodatnaOprema(selectedForDelete.id)">Izbriši</button>
+  </div>
+</app-dodatna-oprema-delete-dialog>

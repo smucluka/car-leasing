@@ -3,7 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
 import { Car } from 'src/app/_models/car';
 import { CarService } from 'src/app/_services/car.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { MessageService } from 'src/app/_services/message.service';
 
 
 @Component({
@@ -12,33 +13,52 @@ import { Router } from '@angular/router';
 })
 export class CarListAdminComponent implements OnInit {
   cars: Car[] = [];
+  selectedForDelete: Car = new Car();
+  message: string;
+  showDialog = false;
 
   constructor(
+    protected activatedRoute: ActivatedRoute,
     private router: Router,
-    private carService: CarService
+    private carService: CarService,
+    public messageService: MessageService
   ) { }
 
   ngOnInit() {
+    this.message = this.messageService.message;
+    // TODO: auto expire
+    this.messageService.message = '';
+
     this.carService.getAll().pipe(first()).subscribe(cars => {
         this.cars = cars;
     });
-    console.log(this.cars);
   }
 
-  createCar() {
+  public createCar(): void {
     this.router.navigateByUrl('admin/car/new');
   }
 
-  editCar(id: number) {
+  public editCar(id: number): void {
     this.router.navigateByUrl('admin/car/' + id + '/edit');
   }
 
-  carDetails(id: number) {
+  public carDetails(id: number): void {
     this.router.navigateByUrl('admin/car/' + id + '/details');
   }
 
-  deleteCar(id: number) {
+  public selectForDelete(car: Car): void {
+    this.selectedForDelete = car;
+    this.showDialog = true;
+  }
 
+  public deleteCar(id: number): void {
+    this.carService.delete(id).subscribe(({message}) => {
+      this.message = message;
+      if (message.includes('Success')) {
+        this.cars.splice(this.cars.indexOf(this.selectedForDelete), 1);
+      }
+      this.showDialog = false;
+    });
   }
 
 }

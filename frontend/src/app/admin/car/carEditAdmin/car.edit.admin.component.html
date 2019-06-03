@@ -1,1 +1,135 @@
-<h1>{{action}}</h1>
+<div class="container">
+    <h1>{{action}} automobil</h1>
+    <form (ngSubmit)="onSubmit()" #carEditForm="ngForm">
+      <div *ngIf="action == 'Edit'"  class="form-group">
+        <label for="id">ID</label>
+        <input type="text" class="form-control" [(ngModel)]="car.id" #id="ngModel" id="id" name="id" disabled>
+      </div>
+
+      <div class="form-group">
+        <label for="marka">Marka</label>
+        <select class="form-control"  id="marka" required [(ngModel)]="car.marka_id" #marka="ngModel" name="marka" required>
+          <option *ngFor="let marka of markaList" [value]="marka.id">{{marka.name}}</option>
+        </select>
+      </div>
+  
+      <div class="form-group">
+        <label for="model">Model</label>
+        <input type="text" class="form-control" id="model" required [(ngModel)]="car.model" #model="ngModel" name="model">
+      </div>
+
+      <div class="form-group">
+        <label for="godinaProizvodnje">Godina proizvodnje</label>
+        <input type="text" class="form-control" id="godinaProizvodnje" required [(ngModel)]="car.godina_proizvodnje" #godinaProizvodnje="ngModel" name="godinaProizvodnje">
+      </div>
+
+      <div class="form-group">
+        <label for="godinaModela">Godina modela</label>
+        <input type="text" class="form-control" id="godinaModela" required [(ngModel)]="car.godina_modela" #godinaModela="ngModel" name="godinaModela">
+      </div>
+
+      <div class="form-group">
+        <label for="kilometraza">Kilometraža</label>
+        <input type="text" class="form-control" id="kilometraza" required [(ngModel)]="car.kilometraza" #kilometraza="ngModel" name="kilometraza">
+      </div>
+
+      <div class="form-group">
+        <label for="motor">Motor</label>
+        <input type="text" class="form-control" id="motor" required [(ngModel)]="car.motor" #motor="ngModel" name="motor">
+      </div>
+
+      <div class="form-group">
+        <label for="snagaMotora">Snaga motora</label>
+        <input type="text" class="form-control" id="snagaMotora" required [(ngModel)]="car.snaga_motora" #snagaMotora="ngModel" name="snagaMotora">
+      </div>
+
+      <div class="form-group">
+        <label for="radniObujam">Radni obujam</label>
+        <input type="text" class="form-control" id="radniObujam" required [(ngModel)]="car.radni_obujam" #radniObujam="ngModel" name="radniObujam">
+      </div>
+
+      <div class="form-group">
+        <label for="mjenjac">Mjenjač</label>
+        <input type="text" class="form-control" id="mjenjac" required [(ngModel)]="car.mjenjac" #mjenjac="ngModel" name="mjenjac">
+      </div>
+
+      <div class="form-group">
+        <label for="brojStupnjeva">Broj stupnjeva</label>
+        <input type="text" class="form-control" id="brojStupnjeva" required [(ngModel)]="car.broj_stupnjeva" #brojStupnjeva="ngModel" name="brojStupnjeva">
+      </div>
+
+      <div class="form-group">
+        <label for="potrosnjaGoriva">Potrošnja goriva</label>
+        <input type="text" class="form-control" id="potrosnjaGoriva" required [(ngModel)]="car.potrosnja_goriva" #potrosnjaGoriva="ngModel" name="potrosnjaGoriva">
+      </div>
+
+      <div class="form-group">
+        <label for="stanjeVozila">Stanje vozila</label>
+        <input type="text" class="form-control" id="stanjeVozila" required [(ngModel)]="car.stanje_vozila" #stanjeVozila="ngModel" name="stanjeVozila">
+      </div>
+
+      <div class="form-group">
+        <label for="lokacijaVozila">Lokacija vozila</label>
+        <input type="text" class="form-control" id="lokacijaVozila" required [(ngModel)]="car.lokacija_vozila" #lokacijaVozila="ngModel" name="lokacijaVozila">
+      </div>
+
+      <div class="form-group">
+        <label for="vlasnik">Vlasnik</label>
+        <input type="text" class="form-control" id="vlasnik" required [(ngModel)]="car.vlasnik" #vlasnik="ngModel" name="vlasnik">
+      </div>
+
+      <div class="form-group">
+        <label for="garaziran">Garažiran</label>
+        <input type="text" class="form-control" id="garaziran" required [(ngModel)]="car.garaziran" #garaziran="ngModel" name="garaziran">
+      </div>
+
+      <div class="form-group">
+        <label for="brojVrata">Broj vrata</label>
+        <input type="text" class="form-control" id="brojVrata" required [(ngModel)]="car.broj_vrata" #brojVrata="ngModel" name="brojVrata">
+      </div>
+
+      <div class="form-group">
+        <label for="brojSjedala">Broj sjedala</label>
+        <input type="text" class="form-control" id="brojSjedala" required [(ngModel)]="car.broj_sjedala" #brojSjedala="ngModel" name="brojSjedala">
+      </div>
+
+      <div class="form-group">
+        <label for="boja">Boja</label>
+        <input type="text" class="form-control" id="boja" required [(ngModel)]="car.boja" #boja="ngModel" name="boja">
+      </div>
+
+      <div class="form-group">
+        <label for="vrstaPogona">Vrsta pogona</label>
+        <input type="text" class="form-control" id="vrstaPogona" required [(ngModel)]="car.vrsta_pogona" #vrstaPogona="ngModel" name="vrstaPogona">
+      </div>
+
+      <div class="form-group">
+        <label for="dodatnaOprema">Dodatna oprema</label>
+        <!-- <angular2-multiselect [data]="dodatnaOpremaList" [(ngModel)]="selectedDodatnaOprema"
+                              [settings]="dropdownSettings" name="dodatnaOprema">
+        </angular2-multiselect>-->
+        <ng-multiselect-dropdown
+          [data]="dodatnaOpremaList"
+          [(ngModel)]="selectedDodatnaOprema"
+          [settings]="dropdownSettings"
+          id="dodatnaOprema"
+          #dodatnaOprema="ngModel"
+          name="dodatnaOprema"
+        >
+        </ng-multiselect-dropdown>
+        <!-- <select class="form-control"  id="dodatnaOprema" name="dodatnaOprema" required>
+          <option *ngFor="let dodatnaOprema of dodatnaOpremaList" [value]="dodatnaOprema.id">{{dodatnaOprema.name}}</option>
+        </select> -->
+      </div>
+
+      <p>TODO: images upload</p>
+      <div class="form-group">
+        <label for="slike">Slike</label>
+        <input type="file" class="form-control" id="slike" [(ngModel)]="carImages" #slike="ngModel" name="slike" multiple>
+      </div>
+  
+      <button type="submit" class="btn btn-success" [disabled]="!carEditForm.form.valid">{{action}}</button>
+      <button type="button" class="btn btn-danger" (click)="goBack()">Natrag</button>
+  
+    </form>
+  </div>

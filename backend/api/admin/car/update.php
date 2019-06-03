@@ -73,9 +73,25 @@ if($jwt){
 
         // set product property values
         $car->id = $data->id;
-        $car->manufacturer = $data->manufacturer;
+        $car->marka_id = $data->marka_id;
         $car->model = $data->model;
-        $car->year = $data->year;
+        $car->godina_proizvodnje = $data->godina_proizvodnje;
+        $car->godina_modela = $data->godina_modela;
+        $car->kilometraza = $data->kilometraza;
+        $car->motor = $data->motor;
+        $car->snaga_motora = $data->snaga_motora;
+        $car->radni_obujam = $data->radni_obujam;
+        $car->mjenjac = $data->mjenjac;
+        $car->broj_stupnjeva = $data->broj_stupnjeva;
+        $car->potrosnja_goriva = $data->potrosnja_goriva;
+        $car->stanje_vozila = $data->stanje_vozila;
+        $car->lokacija_vozila = $data->lokacija_vozila;
+        $car->vlasnik = $data->vlasnik;
+        $car->garaziran = $data->garaziran;
+        $car->broj_vrata = $data->broj_vrata;
+        $car->broj_sjedala = $data->broj_sjedala;
+        $car->boja = $data->boja;
+        $car->vrsta_pogona = $data->vrsta_pogona;
         
         if($car->update()){
 
