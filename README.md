@@ -11,5 +11,6 @@
 > npm install
  - backend folder treba kopirati u C:/UwAmp/www
  - backend se pokreće tako da se upali UwAmp
+ - izvršiti db.sql skriptu
  - frontend se pokreće da se u cmd-u izvrši naredba: 
 > npm start
