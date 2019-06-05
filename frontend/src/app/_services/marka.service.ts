@@ -1,4 +1,4 @@
-import { ResponseMessage } from './../_models/constants';
+import { ResponseMessage, apiBaseUrl } from './../_models/constants';
 import { Marka } from './../_models/marka';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -12,7 +12,7 @@ export class MarkaService {
     headers: HttpHeaders = new HttpHeaders({'Content-Type': 'application/json'});
 
     getAll() {
-      return this.http.post<Marka[]>(`http://localhost/backend/api/admin/marka/get-list.php`,
+      return this.http.post<Marka[]>(`${apiBaseUrl}/admin/marka/get-list.php`,
       {},
       { headers: this.headers })
       .pipe(map(marka => {
@@ -21,7 +21,7 @@ export class MarkaService {
     }
 
     getOne(id: number) {
-      return this.http.post<Marka>(`http://localhost/backend/api/admin/marka/get-one.php`,
+      return this.http.post<Marka>(`${apiBaseUrl}/admin/marka/get-one.php`,
       { id },
       { headers: this.headers })
       .pipe(map(marka => {
@@ -30,7 +30,7 @@ export class MarkaService {
     }
 
     create(marka: Marka) {
-      return this.http.post<ResponseMessage>(`http://localhost/backend/api/admin/marka/create.php`,
+      return this.http.post<ResponseMessage>(`${apiBaseUrl}/admin/marka/create.php`,
       {
         name: marka.name
       },
@@ -41,7 +41,7 @@ export class MarkaService {
     }
 
     update(marka: Marka) {
-      return this.http.post<ResponseMessage>(`http://localhost/backend/api/admin/marka/update.php`,
+      return this.http.post<ResponseMessage>(`${apiBaseUrl}/admin/marka/update.php`,
       {
         id: marka.id,
         name: marka.name
@@ -53,7 +53,7 @@ export class MarkaService {
     }
 
     delete(id: number) {
-      return this.http.post<ResponseMessage>(`http://localhost/backend/api/admin/marka/delete.php`,
+      return this.http.post<ResponseMessage>(`${apiBaseUrl}/admin/marka/delete.php`,
       { id },
       { headers: this.headers })
       .pipe(map(message => {

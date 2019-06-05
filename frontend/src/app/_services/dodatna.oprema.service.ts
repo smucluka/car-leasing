@@ -2,7 +2,7 @@ import { DodatnaOprema } from './../_models/dodatna.oprema';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { ResponseMessage } from '../_models/constants';
+import { ResponseMessage, apiBaseUrl } from '../_models/constants';
 
 
 @Injectable({ providedIn: 'root' })
@@ -12,7 +12,7 @@ export class DodatnaOpremaService {
     headers: HttpHeaders = new HttpHeaders({'Content-Type': 'application/json'});
 
     getAll() {
-      return this.http.post<DodatnaOprema[]>(`http://localhost/backend/api/admin/dodatna_oprema/get-list.php`,
+      return this.http.post<DodatnaOprema[]>(`${apiBaseUrl}/admin/dodatna_oprema/get-list.php`,
       {},
       { headers: this.headers })
       .pipe(map(dodatnaOprema => {
@@ -21,7 +21,7 @@ export class DodatnaOpremaService {
     }
 
     getOne(id: number) {
-      return this.http.post<DodatnaOprema>(`http://localhost/backend/api/admin/dodatna_oprema/get-one.php`,
+      return this.http.post<DodatnaOprema>(`${apiBaseUrl}/admin/dodatna_oprema/get-one.php`,
       { id },
       { headers: this.headers })
       .pipe(map(dodatnaOprema => {
@@ -30,7 +30,7 @@ export class DodatnaOpremaService {
     }
 
     create(dodatnaOprema: DodatnaOprema) {
-      return this.http.post<ResponseMessage>(`http://localhost/backend/api/admin/dodatna_oprema/create.php`,
+      return this.http.post<ResponseMessage>(`${apiBaseUrl}/admin/dodatna_oprema/create.php`,
       {
         name: dodatnaOprema.name
       },
@@ -41,7 +41,7 @@ export class DodatnaOpremaService {
     }
 
     update(dodatnaOprema: DodatnaOprema) {
-      return this.http.post<ResponseMessage>(`http://localhost/backend/api/admin/dodatna_oprema/update.php`,
+      return this.http.post<ResponseMessage>(`${apiBaseUrl}/admin/dodatna_oprema/update.php`,
       {
         id: dodatnaOprema.id,
         name: dodatnaOprema.name
@@ -53,7 +53,7 @@ export class DodatnaOpremaService {
     }
 
     delete(id: number) {
-      return this.http.post<ResponseMessage>(`http://localhost/backend/api/admin/dodatna_oprema/delete.php`,
+      return this.http.post<ResponseMessage>(`${apiBaseUrl}/admin/dodatna_oprema/delete.php`,
       { id },
       { headers: this.headers })
       .pipe(map(message => {

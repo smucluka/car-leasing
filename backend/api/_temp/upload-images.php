@@ -10,7 +10,7 @@ if (isset($_SERVER["HTTP_ORIGIN"]) === true) {
 		header('Access-Control-Allow-Credentials: true');
         header('Access-Control-Allow-Methods: POST');
         header('Access-Control-Allow-Headers: Content-Type, Authorization');
-        header("Content-Type: application/json; charset=UTF-8");
+        header("Content-Type: multipart/form-data; charset=UTF-8");
 	}
 	if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
 		exit; // OPTIONS request wants only the policy, we can stop here
@@ -27,17 +27,20 @@ use \Firebase\JWT\JWT;
 
 // files needed to connect to database
 include_once '../../config/database.php';
-include_once '../../objects/car.php';
+include_once '../../config/core.php';
+//include_once '../../objects/slika.php';
+
+
 
 // get database connection
 $database = new Database();
 $db = $database->getConnection();
 
 //instantiate car object
-$car = new Car($db);
+//$slika = new Slika($db);
 
 // get posted data
-$data = json_decode(file_get_contents("php://input"));
+//$data = json_decode(file_get_contents("php://input"));
 
 //get authorization header
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,23 +73,59 @@ if($jwt){
         $decoded = JWT::decode($jwt, $key, array('HS256'));
         
         // Access is granted. Add code of the operation here 
-
-        // set product property values
-        $car->id = $data->id;
-        $img_arr = $car->delete();
         
-        if(isset($img_arr)){
+        
 
-            foreach($img_arr as $img) {
-                unlink($img);
+
+        /*
+        * List of file names to be filled in by the upload script 
+        * below and to be saved in the db table "slika" afterwards.
+        */
+        $filenamesToSave = [];
+        $allowedMimeTypes = explode(',', UPLOAD_ALLOWED_MIME_TYPES);
+        // upload files
+        /*if (!empty($_FILES)) {
+            if (isset($_FILES['file']['error'])) {
+                foreach ($_FILES['file']['error'] as $uploadedFileKey => $uploadedFileError) {
+                    if ($uploadedFileError === UPLOAD_ERR_NO_FILE) {
+                        $errors[] = 'You did not provide any files.';
+                    } elseif ($uploadedFileError === UPLOAD_ERR_OK) {
+                        $uploadedFileName = basename($_FILES['file']['name'][$uploadedFileKey]);
+    
+                        if ($_FILES['file']['size'][$uploadedFileKey] <= UPLOAD_MAX_FILE_SIZE) {
+                            $uploadedFileType = $_FILES['file']['type'][$uploadedFileKey];
+                            $uploadedFileTempName = $_FILES['file']['tmp_name'][$uploadedFileKey];
+    
+                            $uploadedFilePath = rtrim(UPLOAD_DIR, '/') . '/' . $uploadedFileName;
+    
+                            if (in_array($uploadedFileType, $allowedMimeTypes)) {
+                                if (!move_uploaded_file($uploadedFileTempName, $uploadedFilePath)) {
+                                    $errors[] = 'The file "' . $uploadedFileName . '" could not be uploaded.';
+                                } else {
+                                    $filenamesToSave[] = $uploadedFilePath;
+                                }
+                            } else {
+                                $errors[] = 'The extension of the file "' . $uploadedFileName . '" is not valid. Allowed extensions: JPG, JPEG, PNG, or GIF.';
+                            }
+                        } else {
+                            $errors[] = 'The size of the file "' . $uploadedFileName . '" must be of max. ' . (UPLOAD_MAX_FILE_SIZE / 1024) . ' KB';
+                        }
+                    }
+                }
             }
+        }*/
+
+      
+
+        //if($slika->insert($filenamesToSave)){
+        if(true){
 
             // set response code
             http_response_code(200);
 
             echo json_encode(
                 array(
-                    "message" => "Car successfully deleted."
+                    "id" => $_FILES
                 )
             );
         }        
@@ -98,7 +137,8 @@ if($jwt){
         
             // tell the user no products found
             echo json_encode(
-                array("message" => "Unable to delete car.")
+                //array("message" => "Unable to add car.")
+                array($data)
             );
         }
     }

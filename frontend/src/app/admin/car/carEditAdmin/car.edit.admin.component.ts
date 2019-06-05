@@ -22,7 +22,8 @@ export class CarEditAdminComponent implements OnInit {
   dodatnaOpremaList: DodatnaOprema[];
   selectedDodatnaOprema: DodatnaOprema[];
   dropdownSettings = {};
-  carImages: File[];
+  carImages = [];
+  previewImages: string[] = [];
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -63,10 +64,25 @@ export class CarEditAdminComponent implements OnInit {
 
   }
 
-  public onSubmit() {
+  public onFileChange(event): void {
+    for (const file of event.target.files) {
+      this.carImages.push(file);
 
+      let reader = new FileReader();
+      reader.onload = (event: any) => {
+        this.previewImages.push(event.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  public removeImage(file: any) {
+    this.carImages.slice(this.carImages.indexOf(file), 1);
+  }
+
+  public onSubmit() {
     if (this.action === Action.CREATE) {
-      this.carService.create(this.car, this.selectedDodatnaOprema).subscribe(({message}) => {
+      this.carService.create(this.car, this.selectedDodatnaOprema, this.carImages).subscribe(({message}) => {
         this.messageService.message = message;
         this.router.navigateByUrl('admin/car/list');
       });

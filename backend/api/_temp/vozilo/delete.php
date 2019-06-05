@@ -9,7 +9,7 @@ if (isset($_SERVER["HTTP_ORIGIN"]) === true) {
 		header('Access-Control-Allow-Origin: ' . $origin);
 		header('Access-Control-Allow-Credentials: true');
         header('Access-Control-Allow-Methods: POST');
-        header('Access-Control-Allow-Headers: Content-Type, Authorization');
+        header('Access-Control-Allow-Headers: Content-Type');
         header("Content-Type: application/json; charset=UTF-8");
 	}
 	if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
@@ -73,13 +73,8 @@ if($jwt){
 
         // set product property values
         $car->id = $data->id;
-        $img_arr = $car->delete();
         
-        if(isset($img_arr)){
-
-            foreach($img_arr as $img) {
-                unlink($img);
-            }
+        if($car->delete()){
 
             // set response code
             http_response_code(200);

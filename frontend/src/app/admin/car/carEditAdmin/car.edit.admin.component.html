@@ -1,6 +1,6 @@
 <div class="container">
     <h1>{{action}} automobil</h1>
-    <form (ngSubmit)="onSubmit()" #carEditForm="ngForm">
+    <form (ngSubmit)="onSubmit()" #carEditForm="ngForm" enctype="multipart/form-data">
       <div *ngIf="action == 'Edit'"  class="form-group">
         <label for="id">ID</label>
         <input type="text" class="form-control" [(ngModel)]="car.id" #id="ngModel" id="id" name="id" disabled>
@@ -105,9 +105,6 @@
 
       <div class="form-group">
         <label for="dodatnaOprema">Dodatna oprema</label>
-        <!-- <angular2-multiselect [data]="dodatnaOpremaList" [(ngModel)]="selectedDodatnaOprema"
-                              [settings]="dropdownSettings" name="dodatnaOprema">
-        </angular2-multiselect>-->
         <ng-multiselect-dropdown
           [data]="dodatnaOpremaList"
           [(ngModel)]="selectedDodatnaOprema"
@@ -117,19 +114,46 @@
           name="dodatnaOprema"
         >
         </ng-multiselect-dropdown>
-        <!-- <select class="form-control"  id="dodatnaOprema" name="dodatnaOprema" required>
-          <option *ngFor="let dodatnaOprema of dodatnaOpremaList" [value]="dodatnaOprema.id">{{dodatnaOprema.name}}</option>
-        </select> -->
       </div>
 
-      <p>TODO: images upload</p>
       <div class="form-group">
-        <label for="slike">Slike</label>
-        <input type="file" class="form-control" id="slike" [(ngModel)]="carImages" #slike="ngModel" name="slike" multiple>
+          <label for="slike">Slike</label>
+          <input type="file" class="form-control" id="slike" (change)="onFileChange($event)" multiple>
+        </div>
+
+      <div *ngIf="carImages?.length > 0" class="form-group">
+        <h3>Odabrane slike</h3>
+        <p>Broj slika: {{ carImages?.length }}</p>
+        <table class="table">
+            <thead>
+            <tr>
+                <th width="50%">Naziv</th>
+                <th></th>
+                <th>Veličina</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let file of carImages; let i = index">
+                <td><strong>{{ file?.name }}</strong></td>
+                <td><img [src]="previewImages[i]" width="200" height="200"></td>
+                <td nowrap>{{ file?.size/1024/1024 | number:'.2' }} MB</td>
+                <td nowrap>
+                    <button type="button" class="btn btn-danger btn-xs"
+                            (click)="removeImage(file)">
+                            <i class="fa fa-trash fa-fw"></i> Ukloni
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
       </div>
   
       <button type="submit" class="btn btn-success" [disabled]="!carEditForm.form.valid">{{action}}</button>
       <button type="button" class="btn btn-danger" (click)="goBack()">Natrag</button>
+
+      <br>
+      <br>
   
     </form>
   </div>

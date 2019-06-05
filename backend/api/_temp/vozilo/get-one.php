@@ -69,24 +69,25 @@ if($jwt){
         // decode jwt
         $decoded = JWT::decode($jwt, $key, array('HS256'));
         
-        // Access is granted. Add code of the operation here 
-
+        // Access is granted. Add code of the operation here
+        
         // set product property values
         $car->id = $data->id;
-        $img_arr = $car->delete();
         
-        if(isset($img_arr)){
-
-            foreach($img_arr as $img) {
-                unlink($img);
-            }
+        //query car
+        $car_exists = $car->readById();
+        
+        if($car_exists){
 
             // set response code
             http_response_code(200);
 
             echo json_encode(
                 array(
-                    "message" => "Car successfully deleted."
+                    "id" => $car->id,
+                    "manufacturer" => $car->manufacturer,
+                    "model" => $car->model,
+                    "year" => $car->year
                 )
             );
         }        
@@ -98,7 +99,7 @@ if($jwt){
         
             // tell the user no products found
             echo json_encode(
-                array("message" => "Unable to delete car.")
+                array("message" => "Car not found.")
             );
         }
     }

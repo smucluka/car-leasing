@@ -27,14 +27,14 @@ use \Firebase\JWT\JWT;
 
 // files needed to connect to database
 include_once '../../config/database.php';
-include_once '../../objects/car.php';
+include_once '../../objects/vozilo.php';
 
 // get database connection
 $database = new Database();
 $db = $database->getConnection();
 
 //instantiate car object
-$car = new Car($db);
+$car = new Vozilo($db);
 
 // get posted data
 $data = json_decode(file_get_contents("php://input"));
@@ -70,26 +70,60 @@ if($jwt){
         $decoded = JWT::decode($jwt, $key, array('HS256'));
         
         // Access is granted. Add code of the operation here 
-
-        // set product property values
-        $car->id = $data->id;
-        $img_arr = $car->delete();
         
-        if(isset($img_arr)){
+        //query cars
+        $stmt = $car->readAll();
+        $num = $stmt->rowCount();
 
-            foreach($img_arr as $img) {
-                unlink($img);
+        // check if more than 0 record found
+        if($num>0){
+
+            //cars array
+            $cars_arr=array();
+            //$cars_arr["records"]=array();
+
+            // retrieve our table contents
+            // fetch() is faster than fetchAll()
+            // http://stackoverflow.com/questions/2770630/pdofetchall-vs-pdofetch-in-a-loop
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+                // extract row
+                // this will make $row['name'] to
+                // just $name only
+                extract($row);
+        
+                $car_item=array(
+                    "id"=>$id,
+                    "marka_id" => $marka_id,
+                    "model" => $model,
+                    "godina_proizvodnje" => $godina_proizvodnje,
+                    "godina_modela" => $godina_modela,
+                    "kilometraza" => $kilometraza,
+                    "motor" => $motor,
+                    "snaga_motora" => $snaga_motora,
+                    "radni_obujam" => $radni_obujam,
+                    "mjenjac" => $mjenjac,
+                    "broj_stupnjeva" => $broj_stupnjeva,
+                    "potrosnja_goriva" => $potrosnja_goriva,
+                    "stanje_vozila" => $stanje_vozila,
+                    "lokacija_vozila" => $lokacija_vozila,
+                    "vlasnik" => $vlasnik,
+                    "garaziran" => $garaziran,
+                    "broj_vrata" => $broj_vrata,
+                    "broj_sjedala" => $broj_sjedala,
+                    "boja" => $boja,
+                    "vrsta_pogona" => $vrsta_pogona
+                );
+                
+                //array_push($cars_arr["records"], $car_item);
+                array_push($cars_arr, $car_item);
             }
 
-            // set response code
+            // set response code - 200 OK
             http_response_code(200);
-
-            echo json_encode(
-                array(
-                    "message" => "Car successfully deleted."
-                )
-            );
-        }        
+        
+            // show products data in json format
+            echo json_encode($cars_arr);
+        }
 
         else{
         
@@ -98,7 +132,7 @@ if($jwt){
         
             // tell the user no products found
             echo json_encode(
-                array("message" => "Unable to delete car.")
+                array("message" => "No cars found.")
             );
         }
     }

@@ -29,7 +29,6 @@ class Car{
     public $boja;
     public $vrsta_pogona;
     public $dodatna_oprema;
-    public $filenamesToSave;
  
     // constructor
     public function __construct($db){
@@ -120,7 +119,7 @@ class Car{
     }
 
     //add new car
-    function insert(){
+    function insert($filenamesToSave){
 
         try {
 
@@ -200,6 +199,7 @@ class Car{
         }
 
         $last_id = $this->conn->lastInsertId();
+        $this->id = $last_id;
 
         $query2 = "INSERT INTO automobil_dodatna_oprema
                 SET 
@@ -222,6 +222,7 @@ class Car{
 
         $stmt3 = $this->conn->prepare($query3);
         $stmt3->bindParam(':id_automobil', $last_id);
+
         foreach($filenamesToSave as $fn) {
             $stmt3->bindParam(':filename', $fn);
             $stmt3->execute();
@@ -324,6 +325,23 @@ class Car{
     //delete car
     function delete(){
 
+        // sanitize
+        $this->id=htmlspecialchars(strip_tags($this->id));
+        $img_arr=array();
+
+        // get images
+        $query0 = "SELECT filename FROM slika_automobil WHERE id_automobil = :id";
+        $stmt0 = $this->conn->prepare($query0);
+        $stmt0->bindParam(':id', $this->id);
+        $stmt0->execute();
+        $num = $stmt0->rowCount();
+        if($num>0){            
+            while ($row = $stmt0->fetch(PDO::FETCH_ASSOC)){
+                extract($row);
+                array_push($img_arr, $filename);
+            }
+        }
+
         //delete query
         $query = "DELETE FROM " . $this->table_name . "
                 WHERE id = :id";
@@ -331,18 +349,18 @@ class Car{
         // prepare the query
         $stmt = $this->conn->prepare($query);
     
-        // sanitize
-        $this->id=htmlspecialchars(strip_tags($this->id));
+        
     
         // bind the values from the form
         $stmt->bindParam(':id', $this->id);
     
         // execute the query
         if($stmt->execute()){
-            return true;
+
+            return $img_arr;
         }
     
-        return false;
+        return array();
     }
 }
 ?>

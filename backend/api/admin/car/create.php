@@ -75,55 +75,55 @@ if($jwt){
         // Access is granted. Add code of the operation here 
         
         // set product property values
-        $car->marka_id = $data->marka_id;
-        $car->model = $data->model;
-        $car->godina_proizvodnje = $data->godina_proizvodnje;
-        $car->godina_modela = $data->godina_modela;
-        $car->kilometraza = $data->kilometraza;
-        $car->motor = $data->motor;
-        $car->snaga_motora = $data->snaga_motora;
-        $car->radni_obujam = $data->radni_obujam;
-        $car->mjenjac = $data->mjenjac;
-        $car->broj_stupnjeva = $data->broj_stupnjeva;
-        $car->potrosnja_goriva = $data->potrosnja_goriva;
-        $car->stanje_vozila = $data->stanje_vozila;
-        $car->lokacija_vozila = $data->lokacija_vozila;
-        $car->vlasnik = $data->vlasnik;
-        $car->garaziran = $data->garaziran;
-        $car->broj_vrata = $data->broj_vrata;
-        $car->broj_sjedala = $data->broj_sjedala;
-        $car->boja = $data->boja;
-        $car->vrsta_pogona = $data->vrsta_pogona;
-        $car->dodatna_oprema = $data->dodatna_oprema;
+        $car->marka_id = $_POST['marka_id'];
+        $car->model = $_POST['model'];
+        $car->godina_proizvodnje = $_POST['godina_proizvodnje'];
+        $car->godina_modela = $_POST['godina_modela'];
+        $car->kilometraza = $_POST['kilometraza'];
+        $car->motor = $_POST['motor'];
+        $car->snaga_motora = $_POST['snaga_motora'];
+        $car->radni_obujam = $_POST['radni_obujam'];
+        $car->mjenjac = $_POST['mjenjac'];
+        $car->broj_stupnjeva = $_POST['broj_stupnjeva'];
+        $car->potrosnja_goriva = $_POST['potrosnja_goriva'];
+        $car->stanje_vozila = $_POST['stanje_vozila'];
+        $car->lokacija_vozila = $_POST['lokacija_vozila'];
+        $car->vlasnik = $_POST['vlasnik'];
+        $car->garaziran = $_POST['garaziran'];
+        $car->broj_vrata = $_POST['broj_vrata'];
+        $car->broj_sjedala = $_POST['broj_sjedala'];
+        $car->boja = $_POST['boja'];
+        $car->vrsta_pogona = $_POST['vrsta_pogona'];
+        $car->dodatna_oprema = $_POST['dodatna_oprema'];
 
 
         /*
         * List of file names to be filled in by the upload script 
         * below and to be saved in the db table "slika" afterwards.
         */
-        $filenamesToSave = [];
+        $filenamesToSave = array();
         $allowedMimeTypes = explode(',', UPLOAD_ALLOWED_MIME_TYPES);
         // upload files
-        if (!empty($_FILES)) {
-            if (isset($_FILES['file']['error'])) {
-                foreach ($_FILES['file']['error'] as $uploadedFileKey => $uploadedFileError) {
-                    if ($uploadedFileError === UPLOAD_ERR_NO_FILE) {
+        if(!empty($_FILES)) {
+            $len = count($_FILES);
+            for($i = 0; $i < $len; $i++) {
+                if (isset($_FILES["file" . $i]['error'])) {
+                    if ($_FILES["file" . $i]['error'] === UPLOAD_ERR_NO_FILE) {
                         $errors[] = 'You did not provide any files.';
-                    } elseif ($uploadedFileError === UPLOAD_ERR_OK) {
-                        $uploadedFileName = basename($_FILES['file']['name'][$uploadedFileKey]);
-    
-                        if ($_FILES['file']['size'][$uploadedFileKey] <= UPLOAD_MAX_FILE_SIZE) {
-                            $uploadedFileType = $_FILES['file']['type'][$uploadedFileKey];
-                            $uploadedFileTempName = $_FILES['file']['tmp_name'][$uploadedFileKey];
+                    } elseif ($_FILES["file" . $i]['error'] === UPLOAD_ERR_OK) {
+                        $uploadedFileName = basename($_FILES["file" . $i]['name']);
+
+                        if ($_FILES["file" . $i]['size'] <= UPLOAD_MAX_FILE_SIZE) {
+                            $uploadedFileType = $_FILES["file" . $i]['type'];
+                            $uploadedFileTempName = $_FILES["file" . $i]['tmp_name'];
     
                             $uploadedFilePath = rtrim(UPLOAD_DIR, '/') . '/' . $uploadedFileName;
-    
+
                             if (in_array($uploadedFileType, $allowedMimeTypes)) {
                                 if (!move_uploaded_file($uploadedFileTempName, $uploadedFilePath)) {
                                     $errors[] = 'The file "' . $uploadedFileName . '" could not be uploaded.';
                                 } else {
-                                    $filenamesToSave[] = $uploadedFilePath;
-                                    $car->filenamesToSave = $filenamesToSave;
+                                    array_push($filenamesToSave, $uploadedFilePath);
                                 }
                             } else {
                                 $errors[] = 'The extension of the file "' . $uploadedFileName . '" is not valid. Allowed extensions: JPG, JPEG, PNG, or GIF.';
@@ -136,9 +136,7 @@ if($jwt){
             }
         }
 
-
-
-        if($car->insert()){
+        if($car->insert($filenamesToSave)){
 
             // set response code
             http_response_code(200);

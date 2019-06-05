@@ -54,7 +54,7 @@ export class CarListAdminComponent implements OnInit {
   public deleteCar(id: number): void {
     this.carService.delete(id).subscribe(({message}) => {
       this.message = message;
-      if (message.includes('Success')) {
+      if (message.includes('success')) {
         this.cars.splice(this.cars.indexOf(this.selectedForDelete), 1);
       }
       this.showDialog = false;

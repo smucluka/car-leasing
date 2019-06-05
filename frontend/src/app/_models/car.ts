@@ -1,3 +1,5 @@
+import { DodatnaOprema } from './dodatna.oprema';
+
 export class Car {
   id: number;
   marka_id: number;
@@ -20,4 +22,5 @@ export class Car {
   broj_sjedala: number;
   boja: string;
   vrsta_pogona: string;
+  dodatna_oprema: DodatnaOprema[];
 }

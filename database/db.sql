@@ -42,15 +42,14 @@ CREATE TABLE `automobil` (
   `boja` varchar(256) CHARACTER SET latin1 DEFAULT NULL,
   `vrsta_pogona` varchar(256) CHARACTER SET latin1 DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `vozilo_ibfk_1` (`marka_id`),
-  CONSTRAINT `automobil_ibfk_1` FOREIGN KEY (`marka_id`) REFERENCES `marka` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+  KEY `automobil_ibfk_1` (`marka_id`),
+  CONSTRAINT `automobil_ibfk_1` FOREIGN KEY (`marka_id`) REFERENCES `marka` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `automobil` */
 
 insert  into `automobil`(`id`,`marka_id`,`model`,`godina_proizvodnje`,`godina_modela`,`kilometraza`,`motor`,`snaga_motora`,`radni_obujam`,`mjenjac`,`broj_stupnjeva`,`potrosnja_goriva`,`stanje_vozila`,`lokacija_vozila`,`vlasnik`,`garaziran`,`broj_vrata`,`broj_sjedala`,`boja`,`vrsta_pogona`) values 
-(1,7,'320d','2018','2018',140000,'Dizel',150,112423,'Automatski',6,'5.4','rabljeno','Zagreb, Hrvatska','prvi','Da',4,5,'bijela','stražnji'),
-(3,5,'A6','2015','2015',350000,'Benzin',125,2411544,'Rucni',6,'6.7','rabljeno','Njemacka','drugi','Ne',4,5,'crna','prednji');
+(1,7,'320d','2018','2018',140000,'Dizel',150,112423,'Automatski',6,'5.4','rabljeno','Zagreb, Hrvatska','prvi','Da',4,5,'bijela','stražnji');
 
 /*Table structure for table `automobil_dodatna_oprema` */
 
@@ -70,39 +69,6 @@ CREATE TABLE `automobil_dodatna_oprema` (
 insert  into `automobil_dodatna_oprema`(`id_automobil`,`id_dodatna_oprema`) values 
 (1,1);
 
-/*Table structure for table `automobil_slika` */
-
-DROP TABLE IF EXISTS `automobil_slika`;
-
-CREATE TABLE `automobil_slika` (
-  `id_automobil` int(11) NOT NULL,
-  `id_slika` int(11) NOT NULL,
-  PRIMARY KEY (`id_automobil`,`id_slika`),
-  KEY `id_slika` (`id_slika`),
-  CONSTRAINT `automobil_slika_ibfk_1` FOREIGN KEY (`id_automobil`) REFERENCES `automobil` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `automobil_slika_ibfk_2` FOREIGN KEY (`id_slika`) REFERENCES `slika` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-/*Data for the table `automobil_slika` */
-
-/*Table structure for table `car` */
-
-DROP TABLE IF EXISTS `car`;
-
-CREATE TABLE `car` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `manufacturer` varchar(256) DEFAULT NULL,
-  `model` varchar(256) DEFAULT NULL,
-  `year` varchar(256) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-
-/*Data for the table `car` */
-
-insert  into `car`(`id`,`manufacturer`,`model`,`year`) values 
-(1,'bmw','m5','2018'),
-(2,'audi','a7','2015');
-
 /*Table structure for table `dodatna_oprema` */
 
 DROP TABLE IF EXISTS `dodatna_oprema`;
@@ -111,12 +77,14 @@ CREATE TABLE `dodatna_oprema` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 /*Data for the table `dodatna_oprema` */
 
 insert  into `dodatna_oprema`(`id`,`name`) values 
-(1,'klima');
+(1,'klima'),
+(7,'abs'),
+(8,'radio');
 
 /*Table structure for table `marka` */
 
@@ -126,7 +94,7 @@ CREATE TABLE `marka` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=latin1;
 
 /*Data for the table `marka` */
 
@@ -209,17 +177,20 @@ insert  into `marka`(`id`,`name`) values
 (76,'Zastava'),
 (77,'Zhidou');
 
-/*Table structure for table `slika` */
+/*Table structure for table `slika_automobil` */
 
-DROP TABLE IF EXISTS `slika`;
+DROP TABLE IF EXISTS `slika_automobil`;
 
-CREATE TABLE `slika` (
+CREATE TABLE `slika_automobil` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `path` varchar(256) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `filename` varchar(256) DEFAULT NULL,
+  `id_automobil` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_automobil` (`id_automobil`),
+  CONSTRAINT `slika_automobil_ibfk_1` FOREIGN KEY (`id_automobil`) REFERENCES `automobil` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 
-/*Data for the table `slika` */
+/*Data for the table `slika_automobil` */
 
 /*Table structure for table `user` */
 
